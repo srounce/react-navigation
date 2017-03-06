@@ -16,7 +16,8 @@ import type {
 export type StackNavigatorConfig =
   & NavigationContainerConfig
   & NavigationStackViewConfig
-  & NavigationStackRouterConfig;
+  & NavigationStackRouterConfig
+  & { router: NavigationRouter };
 
 export default (routeConfigMap: NavigationRouteConfigMap, stackConfig: StackNavigatorConfig = {}) => {
   const {
@@ -38,7 +39,9 @@ export default (routeConfigMap: NavigationRouteConfigMap, stackConfig: StackNavi
     paths,
     navigationOptions,
   };
-  const router = StackRouter(routeConfigMap, stackRouterConfig);
+  const router = (typeof stackConfig.router !== 'object')
+    ? StackRouter(routeConfigMap, stackRouterConfig)
+    : stackConfig.router;
   return createNavigationContainer(createNavigator(router)(props => (
     <CardStack
       {...props}
